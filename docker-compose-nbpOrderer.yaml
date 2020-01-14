@@ -1,0 +1,108 @@
+version: '2'
+
+volumes:
+  nbpOrderer1.nbp.com:
+  nbpOrderer2.nbp.com:
+  nbpOrderer3.nbp.com:
+  nbpOrderer4.nbp.com:
+  nbpOrderer5.nbp.com:
+
+networks:
+  business_blockchain:
+
+services:
+
+  nbpOrderer1.nbp.com:
+    container_name: nbpOrderer1.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer1.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer1.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer1.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:192.168.1.105"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 7050:7050
+
+  nbpOrderer2.nbp.com:
+    container_name: nbpOrderer2.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer2.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer2.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer2.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:192.168.1.105"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 8050:7050
+
+  nbpOrderer3.nbp.com:
+    container_name: nbpOrderer3.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer3.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer3.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer3.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:192.168.1.105"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 9050:7050
+
+  nbpOrderer4.nbp.com:
+    container_name: nbpOrderer4.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer4.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer4.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer4.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:192.168.1.105"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 10050:7050
+
+  nbpOrderer5.nbp.com:
+    container_name: nbpOrderer5.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer5.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer5.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer5.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:192.168.1.105"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 11050:7050

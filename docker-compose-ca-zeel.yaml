@@ -1,0 +1,26 @@
+version: '2'
+
+networks: 
+  business_blockchain:
+
+services:
+
+  ca:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-zeel
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.zeel.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ce04ad99d43cc34bea46e279139c881a96de92c1fb7ffd291d4bf3117203f08d_sk
+      - FABRIC_CA_SERVER_PORT=7054
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.zeel.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/ce04ad99d43cc34bea46e279139c881a96de92c1fb7ffd291d4bf3117203f08d_sk -b admin:adminpw -d'
+    volumes:
+      - ./channel-artifacts/crypto-config/peerOrganizations/zeel.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    extra_hosts:
+      - "peer0.zeel.com:192.168.1.103"
+    container_name: ca.zeel.com
+    networks:
+      - business_blockchain

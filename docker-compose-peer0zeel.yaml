@@ -1,0 +1,63 @@
+version: '2'
+
+volumes:
+  peer0.zeel.com:
+
+networks:
+  business_blockchain:
+
+services:
+  couchdb0:
+    container_name: couchdb0
+    image: couchdb:2.3
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "5984:5984"
+    networks:
+      - business_blockchain
+
+  peer0.zeel.com:
+    container_name: peer0.zeel.com
+    extends:
+      file: base/peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.zeel.com
+      - CORE_PEER_ADDRESS=peer0.zeel.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.zeel.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      #- CORE_PEER_GOSSIP_BOOTSTRAP=peer1.zeel.com:12051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.zeel.com:7051
+      - CORE_PEER_LOCALMSPID=ZeelMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./channel-artifacts/crypto-config/peerOrganizations/zeel.com/peers/peer0.zeel.com/msp:/etc/hyperledger/fabric/msp
+      - ./channel-artifacts/crypto-config/peerOrganizations/zeel.com/peers/peer0.zeel.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.zeel.com:/var/hyperledger/production
+    extra_hosts:
+      - "nbpOrderer1.nbp.com:192.168.1.105"
+      - "nbpOrderer2.nbp.com:192.168.1.105"
+      - "nbpOrderer3.nbp.com:192.168.1.105"
+      - "nbpOrderer4.nbp.com:192.168.1.105"
+      - "nbpOrderer5.nbp.com:192.168.1.105"
+      - "ca.zeel.com:192.168.1.103"
+    networks:
+      - business_blockchain
+    ports:
+      - 7051:7051
+    depends_on:
+      - couchdb0
