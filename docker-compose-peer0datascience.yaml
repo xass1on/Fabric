@@ -1,0 +1,64 @@
+version: '2'
+
+volumes:
+  peer0.datascience.com:
+
+networks:
+  business_blockchain:
+
+services:
+  couchdb0:
+    container_name: couchdb0
+    image: couchdb:2.3
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "5984:5984"
+    networks:
+      - business_blockchain
+
+  peer0.datascience.com:
+    container_name: peer0.datascience.com
+    extends:
+      file: base/peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.datascience.com
+      - CORE_PEER_ADDRESS=peer0.datascience.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.datascience.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      # - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.datascience.com:8051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.datascience.com:7051
+      - CORE_PEER_LOCALMSPID=DataScienceMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/datascience.com/peers/peer0.datascience.com/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/datascience.com/peers/peer0.datascience.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.datascience.com:/var/hyperledger/production
+    extra_hosts:
+      - "nbpOrderer1.nbp.com:202.131.1.117"
+      - "nbpOrderer2.nbp.com:202.131.1.112"
+      - "nbpOrderer3.nbp.com:202.131.1.118"
+      - "nbpOrderer4.nbp.com:202.131.1.127"
+      - "nbpOrderer5.nbp.com:202.131.1.138"
+      - "ca.datascience.com:202.131.1.125"
+      # - "peer0.eclinic.com:202.131.1.117"
+    networks:
+      - business_blockchain
+    ports:
+      - 7051:7051
+    depends_on:
+      - couchdb0
