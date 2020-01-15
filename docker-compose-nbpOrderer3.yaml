@@ -1,0 +1,28 @@
+version: '2'
+
+volumes:
+  nbpOrderer3.nbp.com:
+
+networks:
+  business_blockchain:
+
+services:
+
+  nbpOrderer3.nbp.com:
+    container_name: nbpOrderer3.nbp.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer3.nbp.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nbp.com/orderers/nbpOrderer3.nbp.com/tls/:/var/hyperledger/orderer/tls
+      - nbpOrderer3.nbp.com:/var/hyperledger/production/orderer
+    # IP address of all peer nodes in the network
+    extra_hosts:
+      - "peer0.datascience.com:202.131.1.133"
+      - "peer0.eclinic.com:192.168.1.100"
+    networks:
+      - business_blockchain
+    ports:
+      - 7050:7050
