@@ -180,7 +180,76 @@ var Chaincode = class {
     await stub.putState(indexKey, Buffer.from('\u0000'))
     console.info('- end init blood test')
   }
+  async addResult2(stub, args, thisClass) {
+    if (args.length != 3) {
+      throw new Error('Incorrect number of arguments. Expecting 3');
+    }
+    // ==== Input sanitation ====
+    console.info('--- start init Result ---')
+    if (args[0].lenth <= 0) {
+      throw new Error('1st argument must be a non-empty string');
+    }
+    if (args[1].lenth <= 0) {
+      throw new Error('2nd argument must be a non-empty string');
+    }
+    if (args[2].lenth <= 0) {
+      throw new Error('3rd argument must be a non-empty string');
+    }
+    let userName = args[0];
+    let userRegistrationNumber = args[1];
 
+    // ================== Test Code
+
+    let resJson = {
+      test_result: {
+        testType: 'blood test',
+        userName: 'null',
+        userRegistrationNumber: 'null',
+        userResult: []
+      }
+    }
+
+    let userResults = {
+    }
+
+    userResults.blood_type1 = args[2].toLowerCase()
+    userResults.blood_type2 = args[2].toLowerCase()
+    userResults.blood_type3 = args[2].toLowerCase()
+    userResults.blood_type4 = args[2].toLowerCase()
+    userResults.blood_type5 = args[2].toLowerCase()
+    userResults.blood_type6 = args[2].toLowerCase()
+    userResults.blood_type7 = args[2].toLowerCase()
+    userResults.blood_type8 = args[2].toLowerCase()
+    userResults.blood_type9 = args[2].toLowerCase()
+    userResults.blood_type10 = args[2].toLowerCase()
+    userResults.blood_type11 = args[2].toLowerCase()
+    userResults.blood_type12 = args[2].toLowerCase()
+    userResults.blood_type13 = args[2].toLowerCase()
+    userResults.blood_type14 = args[2].toLowerCase()
+    userResults.blood_type15 = args[2].toLowerCase()
+    userResults.blood_type16 = args[2].toLowerCase()
+    userResults.blood_type17 = args[2].toLowerCase()
+    userResults.blood_type18 = args[2].toLowerCase()
+    userResults.blood_type19 = args[2].toLowerCase()
+    userResults.blood_type20 = args[2].toLowerCase()
+    userResults.blood_type21 = args[2].toLowerCase()
+    userResults.blood_type22 = args[2].toLowerCase()
+    userResults.blood_type23 = args[2].toLowerCase()
+    userResults.blood_type24 = args[2].toLowerCase()
+    userResults.blood_type25 = args[2].toLowerCase()
+    userResults.blood_type26 = args[2].toLowerCase()
+    userResults.blood_type27 = args[2].toLowerCase()
+    userResults.blood_type28 = args[2].toLowerCase()
+    userResults.blood_type29 = args[2].toLowerCase()
+    userResults.blood_type30 = args[2].toLowerCase()
+
+    resJson.test_result.userName = userName
+    resJson.test_result.userRegistrationNumber = userRegistrationNumber
+    resJson.test_result.userResult.push(userResults)
+
+    // ========== Add test result to state ==========
+    await stub.putState(userName, Buffer.from(JSON.stringify(resJson)))
+  }
   // ===============================================
   // readResult - read a Result from chaincode state
   // ===============================================
